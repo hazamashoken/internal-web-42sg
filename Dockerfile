@@ -8,14 +8,12 @@ RUN npm install --omit=dev --force
 
 FROM prod-deps AS builder
 
-ARG MINIO_ENDPOINT
-
 RUN rm -rf "app/test"
 RUN npm install --force
 RUN npm run build
 
 FROM base AS runner
-ARG NODE_ENV
+ARG NODE_ENV=production
 
 COPY --chown=node:node --from=prod-deps /app/node_modules /app/node_modules
 COPY --chown=node:node --from=builder /app/.next ./.next

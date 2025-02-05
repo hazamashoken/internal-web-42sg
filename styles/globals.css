@@ -80,3 +80,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+.fc-day-today {
+  background-color: inherit !important;
+}

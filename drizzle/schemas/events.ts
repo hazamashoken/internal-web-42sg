@@ -1,11 +1,11 @@
 import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
 export const events = pgTable("events", {
-  startAt: timestamp().notNull(),
-  endAt: timestamp().notNull(),
-  duration: integer().notNull(),
-  rewardRate: integer().notNull(),
-  name: text().notNull(),
-  location: text().default(""),
-  description: text().default(""),
+  startAt: timestamp("start_at").notNull(),
+  endAt: timestamp("end_at").notNull(),
+  duration: integer("duration").notNull(),
+  rewardRate: integer("reward_rate").notNull(),
+  name: text("name").notNull(),
+  location: text("location").default(""),
+  description: text("description").default(""),
 });

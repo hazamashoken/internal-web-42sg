@@ -1,18 +1,18 @@
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { betterAuth } from "better-auth";
-import { genericOAuth } from "better-auth/plugins";
+import { genericOAuth, admin, customSession } from "better-auth/plugins";
 
 import { db } from "@/db/drizzle";
-import { accounts, sessions, users, verifications } from "@/drizzle/schemas";
+import { account, session, user, verification } from "@/drizzle/schemas";
 export const auth = betterAuth({
   //...
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
-      user: users,
-      verification: verifications,
-      account: accounts,
-      session: sessions,
+      user: user,
+      verification: verification,
+      account: account,
+      session: session,
     },
   }),
   session: {
@@ -25,6 +25,9 @@ export const auth = betterAuth({
     },
   },
   plugins: [
+    admin({
+      defaultRole: "student",
+    }),
     genericOAuth({
       config: [
         {
@@ -43,10 +46,24 @@ export const auth = betterAuth({
               emailVerified: true,
               image: profile.image.link,
               login: profile.login,
+              role: profile.kind,
             };
           },
         },
       ],
+    }),
+    customSession(async ({ user, session }) => {
+      const userData = await db.query.user.findFirst({
+        where: (userTable, { eq }) => eq(userTable.id, user.id),
+      });
+
+      return {
+        user: {
+          ...user,
+          role: userData!.role,
+        },
+        session,
+      };
     }),
   ],
   user: {

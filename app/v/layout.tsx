@@ -1,12 +1,15 @@
-import { headers } from "next/headers";
-import { unauthorized } from "next/navigation";
-
-import { auth } from "@/lib/auth";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/Sidebar";
 
 export default async function Layout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <main className="w-full">{children}</main>
+    </SidebarProvider>
+  );
 }

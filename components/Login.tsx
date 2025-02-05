@@ -23,7 +23,7 @@ export function Login() {
               onClick={async () => {
                 await signIn.oauth2({
                   providerId: "42school",
-                  callbackURL: "/dashboard",
+                  callbackURL: "/v/portal",
                 });
               }}
             >
